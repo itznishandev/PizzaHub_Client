@@ -4,10 +4,32 @@ const DEFAULT_API_URL = "http://localhost:5000/api";
 
 export function resolveApiBaseUrl() {
   const envUrl = process.env.NEXT_PUBLIC_API_URL;
+
+  if (typeof window !== "undefined") {
+    const isLocalhost =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+
+    if (envUrl && envUrl.trim().length > 0) {
+      const clean = envUrl.trim().replace(/\/+$/, "");
+      // If deployed on remote HTTPS/Vercel, avoid http://localhost which browser blocks
+      if (!isLocalhost && clean.includes("localhost")) {
+        return "/api";
+      }
+      return clean.endsWith("/api") ? clean : `${clean}/api`;
+    }
+
+    // In production without external API URL, use same-origin /api
+    if (!isLocalhost) {
+      return "/api";
+    }
+  }
+
   if (envUrl && envUrl.trim().length > 0) {
     const clean = envUrl.trim().replace(/\/+$/, "");
     return clean.endsWith("/api") ? clean : `${clean}/api`;
   }
+
   return DEFAULT_API_URL;
 }
 

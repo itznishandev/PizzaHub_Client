@@ -18,51 +18,92 @@ export async function POST(request) {
       process.env.NEXT_PUBLIC_APP_URL ||
       "https://pizzahubweb.vercel.app";
 
-    const stripeKey = (process.env.STRIPE_SECRET_KEY || "").trim();
+    let stripeKey = (
+      process.env.STRIPE_SECRET_KEY ||
+      process.env.STRIPE_KEY ||
+      process.env.STRIPE_SECRET ||
+      process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY ||
+      ""
+    ).trim();
+
+    // Clean any accidental quotes
+    stripeKey = stripeKey.replace(/^['"]|['"]$/g, "");
+
     const isRealStripe =
       stripeKey &&
       (stripeKey.startsWith("sk_test_") || stripeKey.startsWith("sk_live_")) &&
-      stripeKey.length >= 30;
+      stripeKey.length >= 20;
 
     let officialSession = null;
+    let stripeErrorDetail = null;
 
     if (isRealStripe) {
       try {
         const { default: Stripe } = await import("stripe");
         const stripe = new Stripe(stripeKey);
 
-        officialSession = await stripe.checkout.sessions.create({
-          payment_method_types: ["card"],
-          line_items: [
-            {
-              price_data: {
-                currency: "usd",
-                product_data: {
-                  name: "PizzaHub Vendor Premium Plan",
-                  description:
-                    "Unlimited pizza listings, verified kitchen status, and priority homepage placement.",
+        try {
+          officialSession = await stripe.checkout.sessions.create({
+            line_items: [
+              {
+                price_data: {
+                  currency: "usd",
+                  product_data: {
+                    name: "PizzaHub Vendor Premium Plan",
+                    description:
+                      "Unlimited pizza listings, verified kitchen status, and priority homepage promotion.",
+                  },
+                  unit_amount: 2900, // $29.00 USD
+                  recurring: {
+                    interval: "month",
+                  },
                 },
-                unit_amount: 2900, // $29.00 USD
-                recurring: {
-                  interval: "month",
-                },
+                quantity: 1,
               },
-              quantity: 1,
+            ],
+            mode: "subscription",
+            customer_email: user.email,
+            client_reference_id: String(user.id || user._id),
+            metadata: {
+              vendorId: String(user.id || user._id),
+              vendorName: user.name,
+              vendorEmail: user.email,
             },
-          ],
-          mode: "subscription",
-          customer_email: user.email,
-          client_reference_id: String(user.id || user._id),
-          metadata: {
-            vendorId: String(user.id || user._id),
-            vendorName: user.name,
-            vendorEmail: user.email,
-          },
-          success_url: `${clientOrigin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: `${clientOrigin}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
-        });
+            success_url: `${clientOrigin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${clientOrigin}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+          });
+        } catch (subErr) {
+          console.warn("Stripe subscription mode warning, retrying payment mode:", subErr.message);
+          officialSession = await stripe.checkout.sessions.create({
+            line_items: [
+              {
+                price_data: {
+                  currency: "usd",
+                  product_data: {
+                    name: "PizzaHub Vendor Premium Plan",
+                    description:
+                      "Unlimited pizza listings, verified kitchen status, and priority homepage promotion.",
+                  },
+                  unit_amount: 2900,
+                },
+                quantity: 1,
+              },
+            ],
+            mode: "payment",
+            customer_email: user.email,
+            client_reference_id: String(user.id || user._id),
+            metadata: {
+              vendorId: String(user.id || user._id),
+              vendorName: user.name,
+              vendorEmail: user.email,
+            },
+            success_url: `${clientOrigin}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${clientOrigin}/payment/cancel?session_id={CHECKOUT_SESSION_ID}`,
+          });
+        }
       } catch (stripeErr) {
-        console.warn("Stripe Checkout Session API warning:", stripeErr.message);
+        console.error("Stripe Checkout Session API error:", stripeErr.message);
+        stripeErrorDetail = stripeErr.message;
       }
     }
 

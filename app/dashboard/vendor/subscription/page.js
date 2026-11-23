@@ -20,6 +20,7 @@ export default function VendorSubscriptionPage() {
   const router = useRouter();
   const { user, refreshUser } = useAuth();
   const [upgrading, setUpgrading] = useState(false);
+  const [downgrading, setDowngrading] = useState(false);
 
   const isPremium = user?.subscriptionPlan === "premium";
 
@@ -42,6 +43,24 @@ export default function VendorSubscriptionPage() {
       toast.error(err.message || "Checkout initialization failed.");
     } finally {
       setUpgrading(false);
+    }
+  };
+
+  const handleDowngrade = async () => {
+    try {
+      setDowngrading(true);
+      toast("Downgrading to Free Plan...", { icon: "⏳" });
+
+      const res = await apiRequest("/vendor/subscription/downgrade", {
+        method: "POST",
+      });
+
+      toast.success(res.message || "Downgraded to Free Plan!");
+      await refreshUser();
+    } catch (err) {
+      toast.error(err.message || "Failed to downgrade.");
+    } finally {
+      setDowngrading(false);
     }
   };
 
@@ -111,14 +130,26 @@ export default function VendorSubscriptionPage() {
           </div>
 
           <div className="pt-8">
-            <Button
-              variant="outline"
-              size="md"
-              disabled
-              className="w-full text-center opacity-70"
-            >
-              {!isPremium ? "Active Plan" : "Downgrade to Free"}
-            </Button>
+            {!isPremium ? (
+              <Button
+                variant="outline"
+                size="md"
+                disabled
+                className="w-full text-center opacity-70"
+              >
+                Active Plan
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="md"
+                disabled={downgrading}
+                onClick={handleDowngrade}
+                className="w-full text-center text-rose-600 hover:bg-rose-500/10 hover:border-rose-500/30 font-bold cursor-pointer"
+              >
+                {downgrading ? "Downgrading..." : "Downgrade to Free"}
+              </Button>
+            )}
           </div>
         </div>
 

@@ -74,13 +74,13 @@ export function Navbar() {
         </NextLink>
 
         {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-7">
+        <nav className="hidden md:flex items-center gap-1.5">
           <NextLink
             href="/"
-            className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+            className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
               isActive("/")
-                ? "text-[var(--brand-primary)]"
-                : "text-[var(--text-secondary)]"
+                ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
             }`}
           >
             Home
@@ -88,10 +88,10 @@ export function Navbar() {
 
           <NextLink
             href="/menu"
-            className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+            className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
               pathname?.startsWith("/menu")
-                ? "text-[var(--brand-primary)]"
-                : "text-[var(--text-secondary)]"
+                ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
             }`}
           >
             Browse Menu
@@ -101,20 +101,20 @@ export function Navbar() {
             <>
               <NextLink
                 href="/dashboard/customer"
-                className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+                className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
                   isActive("/dashboard/customer")
-                    ? "text-[var(--brand-primary)]"
-                    : "text-[var(--text-secondary)]"
+                    ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
                 }`}
               >
                 My Orders
               </NextLink>
               <NextLink
                 href="/dashboard/customer/favorites"
-                className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+                className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
                   isActive("/dashboard/customer/favorites")
-                    ? "text-[var(--brand-primary)]"
-                    : "text-[var(--text-secondary)]"
+                    ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
                 }`}
               >
                 Wishlist
@@ -126,20 +126,20 @@ export function Navbar() {
             <>
               <NextLink
                 href="/dashboard/vendor/menu"
-                className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+                className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
                   isActive("/dashboard/vendor/menu")
-                    ? "text-[var(--brand-primary)]"
-                    : "text-[var(--text-secondary)]"
+                    ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
                 }`}
               >
                 My Kitchen
               </NextLink>
               <NextLink
                 href="/dashboard/vendor/orders"
-                className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+                className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
                   isActive("/dashboard/vendor/orders")
-                    ? "text-[var(--brand-primary)]"
-                    : "text-[var(--text-secondary)]"
+                    ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
                 }`}
               >
                 Customer Orders
@@ -150,10 +150,10 @@ export function Navbar() {
           {user && user.role === "admin" && (
             <NextLink
               href="/dashboard/admin"
-              className={`text-sm font-semibold transition-colors hover:text-[var(--brand-primary)] ${
+              className={`rounded-full px-4 py-2 text-sm font-bold transition-all ${
                 pathname?.startsWith("/dashboard/admin")
-                  ? "text-[var(--brand-primary)]"
-                  : "text-[var(--text-secondary)]"
+                  ? "bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] shadow-xs"
+                  : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-subtle)]"
               }`}
             >
               Admin Portal

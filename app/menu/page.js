@@ -14,6 +14,8 @@ import {
   Pizza,
   RotateCcw,
   Sparkles,
+  ChevronDown,
+  X,
 } from "lucide-react";
 
 function BrowseMenuContent() {
@@ -93,27 +95,37 @@ function BrowseMenuContent() {
       </div>
 
       {/* Filter and Search Bar Card */}
-      <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 sm:p-7 shadow-[var(--card-shadow)] space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+      <div className="rounded-3xl border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-5 sm:p-7 shadow-[var(--card-shadow)] space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
           {/* Keyword Search Input */}
           <div className="md:col-span-5 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--brand-primary)] pointer-events-none" />
             <Input
               type="text"
               placeholder="Search by pizza name, toppings, or pizzeria..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-11"
+              className="pl-10 pr-9 bg-[var(--bg-elevated)]"
             />
+            {search && (
+              <button
+                type="button"
+                onClick={() => setSearch("")}
+                aria-label="Clear search"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
 
           {/* Location Filter Dropdown */}
           <div className="md:col-span-3 relative">
-            <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)] pointer-events-none" />
+            <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--brand-accent)] pointer-events-none" />
             <Select
               value={location}
               onChange={(e) => setLocation(e.target.value)}
-              className="pl-10"
+              className="pl-10 pr-9 bg-[var(--bg-elevated)]"
             >
               <option value="All">All Locations</option>
               <option value="Gulshan">Gulshan, Dhaka</option>
@@ -132,22 +144,24 @@ function BrowseMenuContent() {
                   </option>
                 ))}
             </Select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
           </div>
 
           {/* Sort By Price / Rating Dropdown (Challenge Requirement) */}
           <div className="md:col-span-3 relative">
-            <ArrowUpDown className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)] pointer-events-none" />
+            <ArrowUpDown className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-amber-500 pointer-events-none" />
             <Select
               value={sort}
               onChange={(e) => setSort(e.target.value)}
-              className="pl-10"
+              className="pl-10 pr-9 bg-[var(--bg-elevated)]"
             >
               <option value="featured">Featured (Premium First)</option>
-              <option value="price_asc">Price: Low to High (Ascending)</option>
-              <option value="price_desc">Price: High to Low (Descending)</option>
+              <option value="price_asc">Price: Low to High</option>
+              <option value="price_desc">Price: High to Low</option>
               <option value="rating">Top Rated (Highest Stars)</option>
               <option value="newest">Newest Arrivals</option>
             </Select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--text-muted)]" />
           </div>
 
           {/* Reset Filters Button */}
@@ -157,10 +171,10 @@ function BrowseMenuContent() {
                 variant="ghost"
                 size="sm"
                 onClick={handleResetFilters}
-                className="w-full text-xs text-[var(--brand-primary)]"
+                className="w-full text-xs font-bold text-[var(--brand-primary)] hover:bg-[var(--brand-primary-soft)] rounded-xl py-2.5"
                 title="Reset all filters"
               >
-                <RotateCcw className="h-4 w-4 mr-1" />
+                <RotateCcw className="h-3.5 w-3.5 mr-1" />
                 Reset
               </Button>
             )}
@@ -168,14 +182,14 @@ function BrowseMenuContent() {
         </div>
 
         {/* Category Pills Slider */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none pt-2 border-t border-[var(--border-subtle)]">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none pt-3 border-t border-[var(--border-subtle)]">
           <button
             type="button"
             onClick={() => setCategory("All")}
             className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all shrink-0 cursor-pointer ${
               category === "All"
-                ? "bg-[var(--brand-primary)] text-white shadow-sm"
-                : "bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--border-subtle)]"
+                ? "bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-accent)] text-white shadow-sm shadow-[var(--brand-primary)]/25"
+                : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-[var(--bg-subtle)] hover:text-[var(--text-primary)]"
             }`}
           >
             All Pizzas
@@ -187,14 +201,69 @@ function BrowseMenuContent() {
               onClick={() => setCategory(cat)}
               className={`rounded-full px-4 py-1.5 text-xs font-bold transition-all shrink-0 cursor-pointer ${
                 category === cat
-                  ? "bg-[var(--brand-primary)] text-white shadow-sm"
-                  : "bg-[var(--bg-subtle)] text-[var(--text-secondary)] hover:bg-[var(--border-subtle)]"
+                  ? "bg-gradient-to-r from-[var(--brand-primary)] to-[var(--brand-accent)] text-white shadow-sm shadow-[var(--brand-primary)]/25"
+                  : "bg-[var(--bg-elevated)] text-[var(--text-secondary)] border border-[var(--border-subtle)] hover:bg-[var(--bg-subtle)] hover:text-[var(--text-primary)]"
               }`}
             >
               {cat}
             </button>
           ))}
         </div>
+
+        {/* Active Filters Summary Chips */}
+        {hasActiveFilters && (
+          <div className="flex flex-wrap items-center gap-2 pt-2 text-xs border-t border-[var(--border-subtle)]/60">
+            <span className="text-[var(--text-muted)] font-medium">Active Filters:</span>
+            {search.trim() && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--brand-primary-soft)] text-[var(--brand-primary)] px-2.5 py-0.5 font-bold">
+                Search: "{search}"
+                <button
+                  type="button"
+                  onClick={() => setSearch("")}
+                  className="hover:opacity-75 cursor-pointer ml-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
+            {category !== "All" && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--brand-accent-soft)] text-[var(--brand-accent)] px-2.5 py-0.5 font-bold">
+                Category: {category}
+                <button
+                  type="button"
+                  onClick={() => setCategory("All")}
+                  className="hover:opacity-75 cursor-pointer ml-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
+            {location !== "All" && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-subtle)] text-[var(--text-secondary)] px-2.5 py-0.5 font-bold">
+                Location: {location}
+                <button
+                  type="button"
+                  onClick={() => setLocation("All")}
+                  className="hover:opacity-75 cursor-pointer ml-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
+            {sort !== "featured" && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-[var(--bg-subtle)] text-[var(--text-secondary)] px-2.5 py-0.5 font-bold">
+                Sort: {sort.replace("_", " ")}
+                <button
+                  type="button"
+                  onClick={() => setSort("featured")}
+                  className="hover:opacity-75 cursor-pointer ml-0.5"
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Results Header */}

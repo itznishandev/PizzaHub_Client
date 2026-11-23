@@ -84,16 +84,38 @@ export function Card({ children, className = "", hover = true, ...props }) {
 }
 
 export function Input({ className = "", ...props }) {
-  return <input className={cn("pizzahub-input", className)} {...props} />;
+  return (
+    <input
+      className={cn(
+        "w-full rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] transition-all duration-200 focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 disabled:cursor-not-allowed disabled:opacity-60",
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 export function Textarea({ className = "", ...props }) {
-  return <textarea className={cn("pizzahub-input min-h-[100px]", className)} {...props} />;
+  return (
+    <textarea
+      className={cn(
+        "w-full min-h-[100px] rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-2.5 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] transition-all duration-200 focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 disabled:cursor-not-allowed disabled:opacity-60",
+        className
+      )}
+      {...props}
+    />
+  );
 }
 
 export function Select({ className = "", children, ...props }) {
   return (
-    <select className={cn("pizzahub-input cursor-pointer", className)} {...props}>
+    <select
+      className={cn(
+        "w-full cursor-pointer appearance-none rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-elevated)] px-4 py-2.5 text-sm text-[var(--text-primary)] transition-all duration-200 focus:border-[var(--brand-primary)] focus:outline-none focus:ring-2 focus:ring-[var(--brand-primary)]/20 disabled:cursor-not-allowed disabled:opacity-60",
+        className
+      )}
+      {...props}
+    >
       {children}
     </select>
   );

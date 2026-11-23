@@ -4,8 +4,8 @@ A role-based, full-stack artisan pizza ordering and kitchen marketplace platform
 
 - **Client Repository**: [https://github.com/itznishandev/PizzaHub_Client](https://github.com/itznishandev/PizzaHub_Client)
 - **Server Repository**: [https://github.com/itznishandev/PizzaHub_Server](https://github.com/itznishandev/PizzaHub_Server)
-- **Live Application**: [https://pizzahub-client.netlify.app](https://pizzahub-client.netlify.app) (or deployed custom domain)
-- **Live Server API**: [https://pizzahub-server.vercel.app/api](https://pizzahub-server.vercel.app/api)
+- **Live Application**: [https://pizzahubweb.vercel.app](https://pizzahubweb.vercel.app)
+- **Live Server API**: [https://pizzahubweb.vercel.app/api](https://pizzahubweb.vercel.app/api)
 
 ---
 
